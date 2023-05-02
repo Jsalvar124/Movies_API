@@ -10,8 +10,6 @@ INSERT INTO movies (name, genre, type, views, rating, image) VALUES
 	('How I met your mother', 'comedy', 'series', '250', '4.3', 'https://m.media-amazon.com/images/M/MV5BNjg1MDQ5MjQ2N15BMl5BanBnXkFtZTYwNjI5NjA3._V1_SX300.jpg'),
 	('Foundation', 'fiction', 'series', '70', NULL, 'https://m.media-amazon.com/images/M/MV5BMTE5MDY1MGUtMmMxNi00YjA3LWIyZTYtN2FhOWJmNTY2NmM4XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg');
 	('Westworld', 'fiction', 'series', '150', NULL, 'https://m.media-amazon.com/images/M/MV5BZDg1OWRiMTktZDdiNy00NTZlLTg2Y2EtNWRiMTcxMGE5YTUxXkEyXkFqcGdeQXVyMTM2MDY0OTYx._V1_SX300.jpg');
-	
-
 
 
 INSERT INTO users (username, email, password) VALUES

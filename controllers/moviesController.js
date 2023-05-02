@@ -1,6 +1,7 @@
 const db = require('../models');
 const Movie = db.movies;
 const User = db.users;
+const UserMovie = db.user_movie;
 const Op = db.Sequelize.Op; //sequalize con mayuscula
 
 const moviesController = {
@@ -68,23 +69,60 @@ const moviesController = {
         console.log("el id de la pelicula es", movieId)
 
         try {
+            if(rating < 1 || rating > 5){
+                return res.status(400).json({ error: 'Invalid rating value' });
+            }
 
             const user = await User.findByPk(userId);
             if (!user) {
-                return res.status(200).json({ error: 'User not found' });
+                return res.status(404).json({ error: 'User not found' });
             }
 
             const movie = await Movie.findByPk(movieId);
             if (!movie) {
-                return res.status(200).json({ error: 'Movie not found' });
+                return res.status(404).json({ error: 'Movie not found' });
             }
 
-            const user_movie_rating = await user.addMovie(movie, {
+            await user.addMovie(movie, {
                 through: { rating: rating, watched: watched }
             });
 
-            console.log(user_movie_rating)
-            res.status(200).json({ message: 'Movie rating added successfully' });
+            // user_movie table only reviews from users that marked as watched.
+            const user_movie_table = await UserMovie.findAll({
+                where: {
+                    watched: 1
+                }
+            })
+            let newAverage = movie.average;
+            let newViews = movie.views;
+
+            if (watched === 1) {
+                let acumRating = 0;
+                let acumViews = 0;
+                user_movie_table.forEach(movie => {
+                    if (movie.MovieId == movieId) {
+                        acumRating += movie.rating
+                        acumViews++
+                    }
+                })
+
+                newAverage = acumRating / acumViews;
+                newViews = acumViews
+            }
+
+            // Update the movie with the new average rating and views
+            await movie.update({
+                rating: newAverage,
+                views: newViews
+            });
+
+            res.status(200).json({
+                message: 'Movie rating added and updated successfully',
+                movieUpdated: movieId,
+                newAverage: newAverage,
+                newViews: newViews,
+                data: user_movie_table
+            })
 
         } catch (error) {
             console.log(error)
