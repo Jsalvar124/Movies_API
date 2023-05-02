@@ -1,7 +1,7 @@
 # Movies_API
 
-Database hosted in: alwaysdata.net
-Database name: pixel_movies_db
+>Database hosted in: alwaysdata.net
+>Database name: pixel_movies_db
 
 ## Entry Points
 1. Get all movies
